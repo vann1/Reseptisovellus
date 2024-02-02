@@ -6,7 +6,6 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route path="/"></Route>
         <Route path="/RegisterPage" element={<RegisterPage></RegisterPage>}></Route>
         <Route path="/LoginPage" element={<LoginPage></LoginPage>}></Route>
       </Routes>

@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import LoginForm from './LoginForm';
 
 const LoginPage = () => {
+  const handleLogin = (currentUser) => {
+    console.log("Kirjautuminen onnistui käyttäjällä: "+ currentUser.username + " " + currentUser.nick + " " + currentUser.email + " " + currentUser.password)
+};
   return(
     <div>
       <h1>Kirjaudu</h1>
-      <LoginForm></LoginForm>
+      <LoginForm onLogin={handleLogin}></LoginForm >
     </div>
   )
 }

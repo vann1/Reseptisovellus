@@ -9,7 +9,7 @@ const RegisterForm = ({ onRegister }) => {
   const handleRegister = () => {
     console.clear()
     if(validateAll(username, password, email, nick)){
-    onRegister(username, password, nick, email);
+    onRegister(username, password, email, nick);
     }
     else {
       return false;
@@ -81,6 +81,11 @@ const RegisterForm = ({ onRegister }) => {
       return false;
     }
   }
+
+  //tyhjentää localstoragen
+  function tyhjennaTestiKayttajat() {
+    localStorage.clear();
+  }
   
   return (
     <div>
@@ -109,6 +114,10 @@ const RegisterForm = ({ onRegister }) => {
         onChange={(e) => setNick(e.target.value)}
       />
       <button onClick={handleRegister}>Kirjaudu</button>
+      <br></br>
+      <br></br>
+      <br></br>
+      <button onClick={tyhjennaTestiKayttajat}>Tyhjennä localstorage testi käyttäjät</button>
     </div>
   );
 };
