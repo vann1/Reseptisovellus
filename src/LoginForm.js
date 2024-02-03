@@ -6,6 +6,7 @@ const LoginForm = ({onLogin}) => {
   const usersList = JSON.parse(localStorage.getItem('usersList'));
   const handleLogin = () => {
       if(validateLogin(usersList) == true){
+        console.log(currentUser)
       onLogin(currentUser)
       }
       else {
