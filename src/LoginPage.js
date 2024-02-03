@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState,  } from 'react';
 import LoginForm from './LoginForm';
 
 const LoginPage = () => {
+
   const handleLogin = (currentUser) => {
     console.log("Kirjautuminen onnistui käyttäjällä: "+ currentUser.username + " " + currentUser.nick + " " + currentUser.email + " " + currentUser.password)
 };
