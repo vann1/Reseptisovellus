@@ -1,89 +1,113 @@
-
 import React, { useState } from 'react';
 
 const RuokaKategoria = () => {
-  //Constit fieldeille
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [AOMaara, setAOMaara] = useState('');
-  const [AOMitta, setAOMitta] = useState('option1');
-  const [AONimi, setAONimi] = useState('');
-  //Reseptille kategoriat.
-  const Kategoria = ['Alkupala','Juoma','Välipala','Pääruoka','Jälkiruoka','Leivonnaiset','Muu'];
+  //Consti setterit jne
+  const [RecipeCategory, setRecipeCategory] = useState(null);
+  const [IngAmount, setIngAmount] = useState('');
+  const [IngMeasure, setIngMeasure] = useState('option1');
+  const [IngName, setIngName] = useState('');
+  const [RecipeName, setRecipeName] = useState('');
+  const [Ingredients, setIngredients] = useState([]); 
+  //Vaihtoehdot kategorialle ja optionsseille
+  const Kategoria = ['Alkupala', 'Juoma', 'Välipala', 'Pääruoka', 'Jälkiruoka', 'Leivonnaiset', 'Muu'];
+  const options = ['mm', 'tl', 'rkl', 'dl', 'l', 'g', 'kg', 'kpl'];
 
-  //Reseptin ainesosan määrän luokitus
-  const options = ['mm','tl', 'rkl', 'dl','l','g','kg','kpl'];
-
-  //Kategorian valinta checkbox change
-  const KategoriaChange = (option) => {
-    setSelectedOption(option);
+  //use state changerit
+  const CategoryChange = (option) => {
+    setRecipeCategory(option);
   };
 
-  //Ainesosan määrä numero
-  const AOMaaraChange = (event) => {
-    const input = event.target.value.replace(/[^0-9]/g, ''); // Allow only numbers
-    setAOMaara(input);
+  const IngAmountChange = (event) => {
+    const input = event.target.value.replace(/[^0-9]/g, '');
+    setIngAmount(input);
   };
 
-  //Ainesosan määrä tl, rkl, dl, kkp, mm, l, g, kg, kpl jne
-  const AOMittaChange = (event) => {
-    setAOMitta(event.target.value);
+  const IngMeasureChange = (event) => {
+    setIngMeasure(event.target.value);
   };
 
-  //Aineasosan nimi
-  const AONimiChange = (event) => {
-    setAONimi(event.target.value);
+  const IngNameChange = (event) => {
+    setIngName(event.target.value);
   };
 
-  //Nappi tällä hetkellä laittaa fieldejen tiedot console.log toiminnallisuus myöhemmin
+  const RecipeNameChange = (event) => {
+    setRecipeName(event.target.value);
+  };
+
+  //Ainesosan lisääminen
+  const addIngredient = () => {
+    setIngredients([...Ingredients, { IngAmount, IngMeasure, IngName }]);
+    setIngAmount('');
+    setIngMeasure('option1');
+    setIngName('');
+  };
+
+
+  //Heittää consoleen mitä tallentuu, tietokanta yhteys myöhemmin
   const TallennaBtnClick = () => {
-    console.log('Reseptin kategoria: ',selectedOption);
-    console.log('Reseptin ainesosan määrä: ',AOMaara);
-    console.log('Reseptin ainesosan määrän kuvaus: ', AOMitta);
-    console.log('Reseptin ainesosan nimi', AONimi);
+    console.log('Reseptin nimi: ', RecipeName);
+    console.log('Reseptin kategoria: ', RecipeCategory);
+    console.log('Ainesosat: ', Ingredients);
   };
 
   return (
-    <form style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+    <form>
+      <label>Reseptin nimi:</label>
+      <input type="text" value={RecipeName} onChange={RecipeNameChange} />
+
       {Kategoria.map((option, index) => (
-        <div id='RuokaKategoria'key={index}>
+        <div id="RuokaKategoria" key={index}>
           <input
             type="checkbox"
             id={`checkbox-${index}`}
             value={option}
-            checked={selectedOption === option}
-            onChange={() => KategoriaChange(option)}
+            checked={RecipeCategory === option}
+            onChange={() => CategoryChange(option)}
           />
           <label htmlFor={`checkbox-${index}`}>{option}</label>
         </div>
       ))}
-      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-      <div>
-        <label>Määrä:</label>
-        <input
-          type="text"
-          value={AOMaara}
-          onChange={AOMaaraChange}
-        />
-      </div>
-      <div>
-        <select value={AOMitta} onChange={AOMittaChange}>
-          {options.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-      </div>
 
-      <div>
-        <label>Ainesosa:</label>
-        <input
-          type="text"
-          value={AONimi}
-          onChange={AONimiChange}
-        />
+      {Ingredients.map((ingredient, index) => (
+        <div key={index} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+          <div>
+            <label>Määrä:</label>
+            <input type="text" value={ingredient.IngAmount} readOnly />
+          </div>
+          <div>
+            <label>Mitta:</label>
+            <input type="text" value={ingredient.IngMeasure} readOnly />
+          </div>
+          <div>
+            <label>Ainesosa:</label>
+            <input type="text" value={ingredient.IngName} readOnly />
+          </div>
+        </div>
+      ))}
+
+      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+        <div>
+          <label>Määrä:</label>
+          <input type="text" value={IngAmount} onChange={IngAmountChange} />
+        </div>
+        <div>
+          <select value={IngMeasure} onChange={IngMeasureChange}>
+            {options.map((option, index) => (
+              <option key={index} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label>Ainesosa:</label>
+          <input type="text" value={IngName} onChange={IngNameChange} />
+        </div>
       </div>
-      </div>
+      <button type="button" onClick={addIngredient}>
+        Lisää Ainesosa
+      </button>
       <button type="button" onClick={TallennaBtnClick}>
         Tallenna
       </button>
