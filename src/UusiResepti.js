@@ -1,16 +1,33 @@
 import React, { useState } from 'react';
 
 const RuokaKategoria = () => {
-  //Consti setterit jne
+  //Muuttujat
   const [RecipeCategory, setRecipeCategory] = useState(null);
   const [IngAmount, setIngAmount] = useState('');
-  const [IngMeasure, setIngMeasure] = useState('option1');
+  const [IngMeasure, setIngMeasure] = useState('ml');
   const [IngName, setIngName] = useState('');
   const [RecipeName, setRecipeName] = useState('');
   const [Ingredients, setIngredients] = useState([]); 
-  //Vaihtoehdot kategorialle ja optionsseille
+  const [RecipeDesc, setRecipeDesc] = useState('');
+  const [RecipeGuide, setRecipeGuide] = useState('');
+  //Vaihtoehdot kategorialle ja ainesosan mitalle
   const Kategoria = ['Alkupala', 'Juoma', 'Välipala', 'Pääruoka', 'Jälkiruoka', 'Leivonnaiset', 'Muu'];
-  const options = ['mm', 'tl', 'rkl', 'dl', 'l', 'g', 'kg', 'kpl'];
+  const options = ['ml', 'tl', 'rkl', 'dl', 'l', 'kkp' ,'g', 'kg', 'kpl'];
+  /*Mitat:
+  Tilavuus:
+  ml = millilitra 1ml
+  tl = teelusikka 5ml
+  rkl = ruokalusikka 15ml
+  dl= desilitra 100ml 
+  kkp = kahvikuppi 150ml / 1,5 dl
+  l = litra = 1000 ml / 10 dl
+  Paino:
+  g = gramma 1g
+  kg = kilogramma 1000g
+  Muut:
+  kpl = kappale
+  */
+
 
   //use state changerit
   const CategoryChange = (option) => {
@@ -34,20 +51,55 @@ const RuokaKategoria = () => {
     setRecipeName(event.target.value);
   };
 
-  //Ainesosan lisääminen
+  const RecipeDescChange = (event) =>{
+    setRecipeDesc(event.target.value);
+  };
+
+  const RecipeGuideChange = (event) => {
+    setRecipeGuide(event.target.value)
+  }
+
+  //Ainesosan lisääminen Varmistaa että inputit eivät ole tyhjiä
   const addIngredient = () => {
-    setIngredients([...Ingredients, { IngAmount, IngMeasure, IngName }]);
-    setIngAmount('');
-    setIngMeasure('option1');
-    setIngName('');
+    if (IngAmount) {
+      if (IngName){
+      setIngredients([...Ingredients, { IngAmount, IngMeasure, IngName }]);
+      setIngAmount('');
+      setIngMeasure('ml');
+      setIngName('');
+    } else{
+      alert('Ainesosan nimi puuttuu');
+    }
+    } else {
+      alert('Ainesosan määrä puuttuu');
+    }
   };
 
 
   //Heittää consoleen mitä tallentuu, tietokanta yhteys myöhemmin
+  //Varmistaa että kentät eivät ole tyhjiä
   const TallennaBtnClick = () => {
-    console.log('Reseptin nimi: ', RecipeName);
-    console.log('Reseptin kategoria: ', RecipeCategory);
-    console.log('Ainesosat: ', Ingredients);
+    if (RecipeName) {
+      if (RecipeCategory){
+        if(Ingredients.length > 0){
+          if(RecipeGuide){
+          console.log('Reseptin nimi: ', RecipeName);
+          console.log('Reseptin kategoria: ', RecipeCategory);
+          console.log('Ainesosat: ', Ingredients);
+          console.log('Reseptin ohje: ', RecipeGuide);
+          console.log('Reseptin kuvaus: ', RecipeDesc);
+          } else{
+            alert('Reseptin ohje puuttuu');
+          }
+        } else {
+          alert('Reseptillä pitää olla vähintään 1 ainesosa.');
+        }
+      } else {
+        alert('Reseptin kategoria puuttuu!')
+      }
+    } else {
+      alert('Reseptin nimi puuttuu!');
+    }
   };
 
   return (
@@ -104,10 +156,20 @@ const RuokaKategoria = () => {
           <label>Ainesosa:</label>
           <input type="text" value={IngName} onChange={IngNameChange} />
         </div>
-      </div>
-      <button type="button" onClick={addIngredient}>
+        <button type="button" onClick={addIngredient}>
         Lisää Ainesosa
-      </button>
+        </button>
+      </div>
+      <div>
+        <label>Reseptin ohje:</label>
+      <div>
+        <textarea type="text" value={RecipeGuide} onChange={RecipeGuideChange}></textarea>
+      </div>
+       <label>Reseptin kuvaus:</label>
+       <div>
+       <textarea type="text" value={RecipeDesc} onChange={RecipeDescChange}></textarea>
+       </div>
+      </div>
       <button type="button" onClick={TallennaBtnClick}>
         Tallenna
       </button>
