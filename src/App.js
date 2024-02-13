@@ -4,6 +4,7 @@ import { RegisterPage } from './RegisterPage';
 import { LoginPage } from './LoginPage';
 import {Navigation} from './navigationComponent';
 function App() {
+  //Navigatio komponentti on vaan testausta varten, voi poistaa
   return (
     <div>
       <Navigation/>
