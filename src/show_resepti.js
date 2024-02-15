@@ -2,7 +2,7 @@ import React from 'react';
 
 function SinglePhoto() {
   const description = "A chocolate cake is a delicious dessert made with rich chocolate, flour, sugar, eggs, and other ingredients. It's often layered with chocolate icing or frosting and can be decorated with additional toppings like chocolate shavings or berries.";
-
+ //test
   const ingredients = [
     { name: 'all-purpose flour', quantity: '2 cups' },
     { name: 'granulated sugar', quantity: '1 3/4 cups' },
