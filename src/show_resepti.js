@@ -34,7 +34,11 @@ function SinglePhoto() {
       <div style={styles.container}>
         <div style={styles.photoContainer}>
           <h1>Chocolate cake</h1>
-          <img src="https://2.bp.blogspot.com/-5bhn9Txn3Js/UFsTsQQ8H3I/AAAAAAAABhM/NDof9afrLrQ/s1600/kakku.jpg" alt="Single Photo" />
+          <img 
+    src="https://kotiliesi.fi/wp-content/uploads/reseptit/196692-suklaakakku.jpg" 
+    alt="Single Photo" 
+    style={{ maxWidth: '300px' }} // Restricting the width of the photo
+  />
         </div>
         <div style={styles.descriptionContainer}>
           <h2>Description</h2>
@@ -58,17 +62,23 @@ const styles = {
   container: {
     display: 'flex',
     justifyContent: 'space-between',
+    backgroundColor: '#FFA500',
   },
   photoContainer: {
     flex: 1,
     margin: '0 30px', // Adjust margin as needed
+    maxWidth: '300px',
+    backgroundColor: '#FFFFFF',
   },
   descriptionContainer: {
     flex: 1,
     margin: '0 30px', // Adjust margin as needed
+    backgroundColor: '#D3B460',
+    color: 'white',
   },
   recipeContainer: {
     marginTop: '20px', // Adjust margin as needed
+    backgroundColor: '#1976D2',
   },
 };
 

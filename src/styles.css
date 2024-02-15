@@ -1,0 +1,18 @@
+body {
+  background-color: #FFA500;
+  color: #FFFFFF;
+}
+/* styles.css */
+
+.button {
+  background-color: #1976D2; /* Orange background */
+  color: #D3B460; /* Gold text color */
+  padding: 10px 20px; /* Padding around the button text */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Add border radius */
+  cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+.button:hover {
+  background-color: #12976D; /* Lighter orange background on hover */
+}
