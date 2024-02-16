@@ -10,6 +10,8 @@ const RuokaKategoria = () => {
   const [Ingredients, setIngredients] = useState([]); 
   const [RecipeDesc, setRecipeDesc] = useState('');
   const [RecipeGuide, setRecipeGuide] = useState('');
+  const [UserID, setUserID] = useState('3');
+  const [Tags, setTags] = useState('tags');
   //Vaihtoehdot kategorialle ja ainesosan mitalle
   const Kategoria = ['Alkupala', 'Juoma', 'Välipala', 'Pääruoka', 'Jälkiruoka', 'Leivonnaiset', 'Muu'];
   const options = ['ml', 'tl', 'rkl', 'dl', 'l', 'kkp' ,'g', 'kg', 'kpl'];
@@ -78,16 +80,36 @@ const RuokaKategoria = () => {
 
   //Heittää consoleen mitä tallentuu, tietokanta yhteys myöhemmin
   //Varmistaa että kentät eivät ole tyhjiä
-  const TallennaBtnClick = () => {
+  const TallennaBtnClick = async () => {
     if (RecipeName) {
       if (RecipeCategory){
         if(Ingredients.length > 0){
           if(RecipeGuide){
-          console.log('Reseptin nimi: ', RecipeName);
-          console.log('Reseptin kategoria: ', RecipeCategory);
-          console.log('Ainesosat: ', Ingredients);
-          console.log('Reseptin ohje: ', RecipeGuide);
-          console.log('Reseptin kuvaus: ', RecipeDesc);
+            try {
+              const response = await fetch('http://localhost:3001/api/addRecipe', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  UserID,
+                  RecipeName,
+                  RecipeCategory,
+                  RecipeGuide,
+                  RecipeDesc,
+                  Tags,
+                }),
+              });
+        
+              if (response.ok) {
+                console.log('Recipe added successfully');
+              } else {
+                console.error('Failed to add recipe:', response.statusText);
+              }
+            } catch (error) {
+              console.error('Error:', error.message);
+            }
+
           } else{
             alert('Reseptin ohje puuttuu');
           }
