@@ -5,11 +5,14 @@ import './index.css';
 import RuokaKategoria from './UusiResepti';
 
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter } from 'react-router-dom'; //sivujen väliseen siirtymiseen
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RuokaKategoria />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </React.StrictMode>
 );
 
