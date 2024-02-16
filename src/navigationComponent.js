@@ -14,6 +14,9 @@ const Navigation = () => (
         <li className="navigation-item">
           <Link to="/LoginPage" className="navigation-link">Log in</Link>
         </li>
+        <li className="navigation-item">
+          <Link to="/NewRecipe" className="navigation-link">New recipe</Link>
+        </li>
       </ul>
     </nav>
   );
