@@ -1,8 +1,9 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Link, useActionData } from 'react-router-dom';
 import './styles.css'
 
-const Navigation = () => (
+const Navigation = () => {
+  return(
     <nav className="navigation">
       <ul className="navigation-list">
         <li className="navigation-item">
@@ -19,7 +20,8 @@ const Navigation = () => (
         </li>
       </ul>
     </nav>
-  );
+  )
+};
   
 
 export  {Navigation};

@@ -160,7 +160,6 @@ const RegisterForm = ({ onRegister }) => {
       <br></br>
       <br></br>
       <br></br>
-      <button onClick={tyhjennaTestiKayttajat}>Tyhjennä localstorage testi käyttäjät</button>
     </div>
   );
 };

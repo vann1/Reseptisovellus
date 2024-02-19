@@ -1,7 +1,10 @@
+require('dotenv').config()
+
 const express = require('express');
 const sql = require('mssql');
 const cors = require('cors'); // Import cors module
 const bodyParser = require('body-parser'); // Import body-parser
+const jwt = require('jsonwebtoken');
 
 const app = express();
 const bcrypt = require('bcrypt'); // for password encrypting
@@ -90,6 +93,38 @@ app.post('/api/addRecipe', async (req, res) => {
     }
   });
 
+
+  //login user api end point
+  app.post('/api/login', async  (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+      await sql.connect(config);
+      const request = new sql.Request();
+      const query = `SELECT * FROM users WHERE email = @email`;
+
+      const result = await request
+      .input('email', sql.NVarChar, email)
+      .query(query);
+
+      const user = result.recordset[0];
+
+      if (!user) {
+        return res.status(400).json({ message: 'Käyttäjää ei löytynyt' });
+      }
+      if (await bcrypt.compare(password, user.password)) {
+        // Salataan jwt-tokeni ja palautetaan se vastauksena
+        const token = jwt.sign({ userId: user.id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+        res.json({ message: 'Kirjautuminen onnistui', token });
+      }
+      else {
+        res.status(400).json({ message: 'Virheellinen salasana' });
+      }
+    } catch (error) {
+      console.error('Kirjautumisvirhe:', error);
+      res.status(500).json({ message: 'Kirjautumisvirhe' });
+    }
+  });
 
   const port = process.env.PORT || 3001;
   app.listen(port, () => {
