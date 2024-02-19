@@ -4,6 +4,7 @@ const cors = require('cors'); // Import cors module
 const bodyParser = require('body-parser'); // Import body-parser
 
 const app = express();
+const bcrypt = require('bcrypt'); // for password encrypting
 
 app.use(cors()); // Enable CORS for all routes
 app.use(bodyParser.json());
@@ -31,16 +32,14 @@ sql.connect(config, (err) => {
 //NEW RECIPE API
 app.post('/api/addRecipe', async (req, res) => {
     const { UserID, RecipeName, RecipeCategory, RecipeGuide, RecipeDesc, Tags } = req.body;
-  
     try {
       await sql.connect(config);
       const request = new sql.Request();
-      
+       
       const query = `
         INSERT INTO [dbo].[recipes] (userid, recipename, category, instructions, description, tags)
         VALUES (@Userid, @RecipeName, @RecipeCategory, @RecipeGuide, @RecipeDesc, @Tags)
       `;
-  
       await request
         .input('Userid', sql.NVarChar, UserID)
         .input('RecipeName', sql.NVarChar, RecipeName)
@@ -59,6 +58,39 @@ app.post('/api/addRecipe', async (req, res) => {
     }
   });
   
+
+//Create user api endpoint
+  app.post('/api/createUser', async (req, res) => {
+    const { username, email, password , name } = req.body;
+  
+    try {
+      //Encrpyting the password
+      const hashedPassword = await bcrypt.hash(password, 10);
+      await sql.connect(config);
+      const request = new sql.Request();
+      
+      const query = `
+        INSERT INTO [dbo].[users] (username, email, password, name)
+        VALUES (@username, @email, @password, @name)
+      `;
+  
+      await request
+        .input('username', sql.NVarChar, username)
+        .input('email', sql.NVarChar, email)
+        .input('password', sql.NVarChar, hashedPassword)
+        .input('name', sql.NVarChar, name)
+        .query(query);
+  
+      res.status(201).send('User created successfully');
+    } catch (error) {
+      console.error('Error creating user to the database:', error);
+      res.status(500).send('Internal Server Error');
+    } finally {
+      sql.close();
+    }
+  });
+
+
   const port = process.env.PORT || 3001;
   app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
