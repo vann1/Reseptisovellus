@@ -1,28 +1,18 @@
 import React, { useState } from 'react';
-import './style.css';
+import { Link } from 'react-router-dom';
+import './styles.css';
 
-const desserts = [
-  { name: 'Chocolate Cake', mainIngredient: 'Chocolate', tag: 'cake' },
-  { name: 'Apple Pie', mainIngredient: 'Apples', tag: 'pie' },
-  { name: 'Cheesecake', mainIngredient: 'Cream cheese', tag: 'cake' },
-  { name: 'Ice Cream', mainIngredient: 'Milk', tag: 'ice cream' },
-  { name: 'Brownies', mainIngredient: 'Chocolate', tag: 'brownies' },
-];
-
-function SearchResults({ searchQuery }) {
-  const filteredDesserts = desserts.filter(dessert =>
-    dessert.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    dessert.mainIngredient.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    dessert.tag.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
+function SearchResults({ recipes }) {
   return (
     <div>
       <h2>Search Results</h2>
       <ul>
-        {filteredDesserts.map((dessert, index) => (
-          <li key={index}>
-            <strong>{dessert.name}</strong> - Main Ingredient: {dessert.mainIngredient}, Tag: {dessert.tag}
+        {recipes.map(recipe => (
+          <li key={recipe.id}>
+            <strong>{recipe.name}</strong>
+            <p>Description: {recipe.description}</p>
+            <p>Ingredients: {recipe.ingredients.join(", ")}</p>
+            <p>Instructions: {recipe.instructions}</p>
           </li>
         ))}
       </ul>
@@ -30,63 +20,70 @@ function SearchResults({ searchQuery }) {
   );
 }
 
-function SearchComponent({ onSearch }) {
-  const [searchText, setSearchText] = useState('');
+function RecipeSearch() {
+  const [nameTerm, setNameTerm] = useState('');
+  const [ingredientTerm, setIngredientTerm] = useState('');
+  const [recipes, setRecipes] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const handleSearchChange = (event) => {
-    setSearchText(event.target.value);
-  };
+  const handleSearch = () => {
+    setLoading(true);
+    let query = '';
+    if (nameTerm) {
+      query += `name_like=${nameTerm}`;
+    }
+    if (ingredientTerm) {
+      query += `${nameTerm ? '&' : ''}ingredients_like=${ingredientTerm}`;
+    }
 
-  const handleSearchClick = () => {
-    onSearch(searchText);
-  };
-
-  return (
-    <div>
-      <h1>Search Website</h1>
-      <input
-        type="text"
-        placeholder="Enter search query"
-        value={searchText}
-        onChange={handleSearchChange}
-      />
-      <button className="button" onClick={handleSearchClick}>Search</button>
-    </div>
-  );
-}
-
-function DessertList() {
-  return (
-    <div>
-      <h2>Desserts</h2>
-      <ul>
-        {desserts.map((dessert, index) => (
-          <li key={index}>
-            <strong>{dessert.name}</strong> - Main Ingredient: {dessert.mainIngredient}, Tag: {dessert.tag}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-function DessertSearchPage() {
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const handleSearch = (query) => {
-    setSearchQuery(query);
+    fetch(`http://localhost:3000/recipes?${query}`)
+      .then(response => response.json())
+      .then(data => {
+        setRecipes(data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching recipe data:', error);
+        setLoading(false);
+      });
   };
 
   return (
     <div>
-      <SearchComponent onSearch={handleSearch} />
-      {searchQuery && <SearchResults searchQuery={searchQuery} />}
-      <DessertList />
+      <h1>Recipe Search</h1>
+      <div>
+        <input
+          type="text"
+          placeholder="Search by recipe name"
+          value={nameTerm}
+          onChange={(e) => setNameTerm(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Search by ingredient"
+          value={ingredientTerm}
+          onChange={(e) => setIngredientTerm(e.target.value)}
+        />
+        <button onClick={handleSearch}>Search</button>
+      </div>
+      {loading ? <div>Loading...</div> : <SearchResults recipes={recipes} />}
     </div>
   );
 }
 
-export default DessertSearchPage;
+export default RecipeSearch;
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
