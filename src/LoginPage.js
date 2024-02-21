@@ -3,7 +3,6 @@ import LoginForm from './LoginForm';
 //testiwqeqw
 const LoginPage = () => {
   const [virheViesti, setVirheViesti] = useState('');
-
   const handleLogin = async (email, password) => {
     console.log(localStorage)
     setVirheViesti('');
